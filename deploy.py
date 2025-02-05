@@ -84,39 +84,39 @@ def recommend(movie, n):
         return [f"An error occurred: {str(e)}"]
 
 # Streamlit app
-st.title("***Movie Recommendation Site*** 😍")
+st.title("Movie Recommendation Site** 😍")
 st.header("Welcome to your personal movie recommendation site 🎬")
 st.write("Type in the name of a movie, and we'll provide you with similar recommendations!")
 st.write("Note: Currently will take input of foreign movies only")
 
-x = st.text_input("Movie Name (e.g., 'Inception')", placeholder="Enter movie name here...")
+# Search bar with dynamic suggestions
+# search_query = st.text_input("Movie Name (e.g., 'Inception')", placeholder="Enter movie name here...")
+# filtered_movies = final_df['title'][final_df['title'].str.contains(search_query, case=False, na=False)].tolist()[:]
+filtered_movies = final_df['title'].tolist()[:]
+selected_movie = st.selectbox("Enter Movies Names: ", options=filtered_movies, index=0 if filtered_movies else None)
+
 number = st.number_input("Number of recommendations", min_value=1, step=1, value=5)
 st.write(f"Number of movies to be predicted: {number}")
 
 if st.button("Recommend"):
-    # Call the recommend function
-    recommendations = recommend(x, number)
+    recommendations = recommend(selected_movie, number)
     
-    # Display the recommendations
-    st.write(f"Here are some recommended movies similar to {x} 🎬:")
+    st.write(f"Here are some recommended movies similar to {selected_movie} 🎬:")
     for movie in recommendations:
         st.write(f"- {movie}")
-            
+        
 # Feedback section with custom CSS class
 st.markdown('<div class="feedback-section">', unsafe_allow_html=True)
-# Sentiment mapping
-sentiment_mapping = [":thumbs_down:", ":thumbs_up:"]
+
 feedback = st.radio("Give your feedback:", ["👍 Thumbs Up", "👎 Thumbs Down"], index=0)
 
-# Mapping the selection to sentiment
 if feedback == "👍 Thumbs Up":
     st.write("You selected: 👍")
     st.write("Thanks for your feedback! 😊")
 elif feedback == "👎 Thumbs Down":
     st.write("You selected: 👎")
     st.write("Thanks for your feedback! 😊 We will try to improve. 🤔")
-
-
+    
 # # Test the function
 # movie = input("Enter the name of the movie: ")
 
